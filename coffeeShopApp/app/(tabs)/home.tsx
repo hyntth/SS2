@@ -13,7 +13,7 @@ const Home = () => {
   const products = [
     {
       name: "Cappuccino",
-      image_url: "https://via.placeholder.com/150",
+      image: require("../../assets/images/caffe_mocha.png"),
       category: "Coffee",
       price: 4.99,
       rating: 4.5,
@@ -21,7 +21,7 @@ const Home = () => {
     },
     {
       name: "Latte",
-      image_url: "https://via.placeholder.com/150",
+      image: require("../../assets/images/caffe_mocha.png"),
       category: "Coffee",
       price: 3.99,
       rating: 4.0,
@@ -29,7 +29,7 @@ const Home = () => {
     },
     {
       name: "Croissant",
-      image_url: "https://via.placeholder.com/150",
+      image: require("../../assets/images/caffe_mocha.png"),
       category: "Bakery",
       price: 2.99,
       rating: 4.2,

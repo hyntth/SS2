@@ -12,7 +12,7 @@ const DetailsPage = () => {
   // Mock static product data
   const product = {
     name: "Cappuccino",
-    image_url: "https://via.placeholder.com/150",
+    image: require("../../assets/images/caffe_mocha.png"),
     type: "Coffee",
     description: "A rich and creamy cappuccino made with espresso and steamed milk.",
     price: "4.99",
