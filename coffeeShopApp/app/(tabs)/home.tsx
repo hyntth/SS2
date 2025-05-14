@@ -9,11 +9,10 @@ import Banner from '@/components/Banner';
 import SearchArea from '@/components/SearchArea';
 
 const Home = () => {
-  
   const products = [
     {
       name: "Cappuccino",
-      image: require("../../assets/images/caffe_mocha.png"),
+      image: require("../../assets/images/caffe_mocha.png"), // Updated
       category: "Coffee",
       price: 4.99,
       rating: 4.5,
@@ -21,7 +20,7 @@ const Home = () => {
     },
     {
       name: "Latte",
-      image: require("../../assets/images/caffe_mocha.png"),
+      image: require("../../assets/images/caffe_mocha.png"), // Updated
       category: "Coffee",
       price: 3.99,
       rating: 4.0,
@@ -29,7 +28,7 @@ const Home = () => {
     },
     {
       name: "Croissant",
-      image: require("../../assets/images/caffe_mocha.png"),
+      image: require("../../assets/images/caffe_mocha.png"), // Updated
       category: "Bakery",
       price: 2.99,
       rating: 4.2,
@@ -37,7 +36,6 @@ const Home = () => {
     },
   ];
 
-  // Mock static categories
   const productCategories = [
     { id: "All", selected: true },
     { id: "Coffee", selected: false },
@@ -80,7 +78,7 @@ const Home = () => {
                     pathname: '/details',
                     params: {
                       name: item.name,
-                      image_url: item.image_url,
+                      image_url: item.image_url, 
                       type: item.category,
                       price: item.price,
                       rating: item.rating,
@@ -90,7 +88,7 @@ const Home = () => {
                 }}
               >
                 <Image
-                  source={{ uri: item.image_url }}
+                  source={item.image} 
                   className='w-full h-32 rounded-2xl'
                 />
                 <Text className="text-[#242424] text-lg font-[Sora-SemiBold] ml-1 mt-2">

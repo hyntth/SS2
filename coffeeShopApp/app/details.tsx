@@ -12,7 +12,7 @@ const DetailsPage = () => {
   // Mock static product data
   const product = {
     name: "Cappuccino",
-    image: require("../../assets/images/caffe_mocha.png"),
+    image: require("../assets/images/caffe_mocha.png"), 
     type: "Coffee",
     description: "A rich and creamy cappuccino made with espresso and steamed milk.",
     price: "4.99",
@@ -35,7 +35,7 @@ const DetailsPage = () => {
         <ScrollView>
           <View className='mx-5 items-center'>
             <DetailsHeader
-              image_url={product.image_url}
+              image={product.image} // Updated to pass image instead of image_url
               name={product.name}
               type={product.type}
               rating={Number(product.rating)}
