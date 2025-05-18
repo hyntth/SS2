@@ -78,7 +78,7 @@ const Home = () => {
                     pathname: '/details',
                     params: {
                       name: item.name,
-                      image_url: item.image_url, 
+                      image_url: item.image_url, // Note: This may need adjustment if details page expects a URI
                       type: item.category,
                       price: item.price,
                       rating: item.rating,
@@ -88,7 +88,7 @@ const Home = () => {
                 }}
               >
                 <Image
-                  source={item.image} 
+                  source={item.image} // Updated to use item.image instead of item.image_url
                   className='w-full h-32 rounded-2xl'
                 />
                 <Text className="text-[#242424] text-lg font-[Sora-SemiBold] ml-1 mt-2">

@@ -58,10 +58,14 @@ export default function Login() {
       </View>
 
       {/* Sign In button */}
-      <TouchableOpacity className="bg-[#C67C4E] mt-8 py-4 rounded-2xl items-center flex-row justify-center">
+      <TouchableOpacity
+        onPress={() => router.replace("/(tabs)/home")}
+        className="bg-[#C67C4E] mt-8 py-4 rounded-2xl items-center flex-row justify-center"
+      >
         <Text className="text-white text-lg font-semibold mr-2">Sign In</Text>
         <Text className="text-white text-lg">→</Text>
       </TouchableOpacity>
+
 
       {/* Google Sign In */}
       <TouchableOpacity className="bg-gray-100 rounded-full w-12 h-12 items-center justify-center mt-6 self-center">
