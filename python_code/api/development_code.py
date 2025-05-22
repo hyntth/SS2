@@ -4,8 +4,8 @@ import os
 def main():
     guard_agent = GuardAgent()
     classification_agent = ClassificationAgent()
-    recommendation_agent = RecommendationAgent('recommendation_objects/apriori_recommendations.json',
-                                                    'recommendation_objects/popularity_recommendation.csv'
+    recommendation_agent = RecommendationAgent('python_code/api/recommendation_objects/apriori_recommendations.json',
+                                                    'python_code/api/recommendation_objects/popularity_recommendation.csv'
                                                     )
     agent_dict: dict[str, AgentProtocol] = {
         "details_agent": DetailsAgent(),
