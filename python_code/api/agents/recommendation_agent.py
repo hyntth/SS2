@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import os
-from .utils import get_chatbot_response
+from .utils import get_chatbot_response, double_check_json_output
 from openai import OpenAI
 from copy import deepcopy
 from dotenv import load_dotenv
@@ -21,9 +21,9 @@ class RecommendationAgent():
 
         self.popular_recommendations = pd.read_csv(popular_recommendation_path)
         self.products = self.popular_recommendations['product'].tolist()
-        self.product_categories = self.popular_recommendations['product_category'].tolist()
+        self.product_categories = list(set( self.popular_recommendations['product_category'].tolist()))
     
-    def get_apriori_recommendation(self,products,top_k=5):
+    def get_apriori_recommendations(self,products,top_k=5):
         recommendation_list = []
         for product in products:
             if product in self.apriori_recommendations:
@@ -95,9 +95,10 @@ class RecommendationAgent():
         }
         """
 
-        input_messages = [{"role": "system", "content": system_prompt}] + messages[-3:]
+        input_messages = [{"role": 'system', "content": system_prompt}] + messages[-3:]
 
-        chatbot_output =get_chatbot_response(self.client,self.model_name,input_messages)
+        chatbot_output = get_chatbot_response(self.client,self.model_name,input_messages)
+        chatbot_output = double_check_json_output(self.client,self.model_name,chatbot_output)
         output = self.postprocess_classfication(chatbot_output)
         return output
 
@@ -108,7 +109,7 @@ class RecommendationAgent():
         recommendation_type = recommendation_classification['recommendation_type']
         recommendations = []
         if recommendation_type == "apriori":
-            recommendations = self.get_apriori_recommendation(recommendation_classification['parameters'])
+            recommendations = self.get_apriori_recommendations(recommendation_classification['parameters'])
         elif recommendation_type == "popular":
             recommendations = self.get_popular_recommendation()
         elif recommendation_type == "popular by category":
@@ -153,11 +154,12 @@ class RecommendationAgent():
         return dict_output
 
     def get_recommendations_from_order(self,messages,order):
+        messages = deepcopy(messages)
         products = []
         for product in order:
             products.append(product['item'])
 
-        recommendations = self.get_apriori_recommendation(products)
+        recommendations = self.get_apriori_recommendations(products)
         recommendations_str = ", ".join(recommendations)
 
         system_prompt = f"""
@@ -185,8 +187,7 @@ class RecommendationAgent():
         output = {
             "role": "assistant",
             "content": output,
-            "memory": {"agent":"recommendation_agent"
-                      }
+            "memory": {"agent":"recommendation_agent"}
         }
         return output
 
