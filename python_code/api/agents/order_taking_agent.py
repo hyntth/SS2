@@ -16,6 +16,7 @@ class OrderTakingAgent():
         self.model_name = os.getenv("MODEL_NAME")
 
         self.recommendation_agent = recommendation_agent
+
     
     def get_response(self,messages):
         messages = deepcopy(messages)
@@ -78,6 +79,7 @@ class OrderTakingAgent():
 
         last_order_taking_status = ""
         asked_recommendation_before = False
+
         for message_index in range(len(messages)-1,0,-1):
             message = messages[message_index]
             
@@ -90,22 +92,21 @@ class OrderTakingAgent():
                 step number: {step_number}
                 order: {order}
                 """
-                break
 
         messages[-1]['content'] = last_order_taking_status + " \n "+ messages[-1]['content']
 
         input_messages = [{"role": "system", "content": system_prompt}] + messages        
 
-        chatbot_output = get_chatbot_response(self.client,self.model_name,input_messages)
+        chatbot_response = get_chatbot_response(self.client,self.model_name,input_messages)
 
         # double check json 
-        chatbot_output = double_check_json_output(self.client,self.model_name,chatbot_output)
+        chatbot_response = double_check_json_output(self.client,self.model_name,chatbot_response)
 
-        output = self.postprocess(chatbot_output,messages,asked_recommendation_before)
+        output = self.postprocess(chatbot_response,messages,asked_recommendation_before)
 
         return output
 
-    def postprocess(self,output,messages,asked_recommendation_before):
+    def postprocess(self,output,messages, asked_recommendation_before):
         output = json.loads(output)
 
         if type(output["order"]) == str:
@@ -121,9 +122,9 @@ class OrderTakingAgent():
             "role": "assistant",
             "content": response ,
             "memory": {"agent":"order_taking_agent",
-                       "step number": output["step number"],
+                       "step number": output.get("step number", 1),
+                       "asked_recommendation_before": asked_recommendation_before,
                        "order": output["order"],
-                       "asked_recommendation_before": asked_recommendation_before
                       }
         }
 
