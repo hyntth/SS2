@@ -2,6 +2,8 @@ import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react-native";
 import { router } from "expo-router";
+import { registerUser } from "../services/authService"; // Import hàm registerUser
+
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,12 +15,18 @@ export default function SignUp() {
   const togglePassword = () => setShowPassword((prev) => !prev);
   const toggleConfirmPassword = () => setShowConfirmPassword((prev) => !prev);
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (password !== confirmPassword) {
       setError("ERROR: Password do not match!");
+      return;
+    }
+    setError("");
+    const success = await registerUser(email, password);
+    if (success) {
+      setError(""); // Xóa lỗi nếu đăng ký thành công
+      router.push("/login"); // Chuyển hướng đến màn hình login
     } else {
-      setError("");
-      
+      setError("Email already exists or registration failed.");
     }
   };
 
@@ -74,7 +82,6 @@ export default function SignUp() {
         </View>
       </View>
 
-      
       <View className="mb-6 w-full">
         <Text className="text-sm font-medium text-gray-900 mb-2 text-left">Password Confirmation</Text>
         <View className="flex-row items-center border border-gray-300 rounded-lg px-4 py-3 w-full">
@@ -97,7 +104,6 @@ export default function SignUp() {
         </View>
       </View>
 
-     
       {error ? (
         <View className="flex-row items-center bg-[#FF6B6B] bg-opacity-10 border border-[#FF6B6B] rounded-lg px-4 py-2 mb-6 w-full">
           <AlertCircle size={18} color="#FF6B6B" />
@@ -105,7 +111,6 @@ export default function SignUp() {
         </View>
       ) : null}
 
-      
       <TouchableOpacity
         onPress={handleSignUp}
         className="bg-[#E8A872] py-4 rounded-lg items-center flex-row justify-center w-full"
@@ -114,13 +119,12 @@ export default function SignUp() {
         <Text className="text-white text-base">→</Text>
       </TouchableOpacity>
 
-     
       <View className="items-center mt-6">
         <Text className="text-gray-900 text-sm">
           Already have an account?{" "}
           <Text
             className="text-[#C57C3E] font-semibold"
-            onPress={() => router.push("/login")} 
+            onPress={() => router.push("/login")}
           >
             Sign In.
           </Text>

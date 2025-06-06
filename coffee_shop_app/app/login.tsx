@@ -2,10 +2,24 @@ import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react-native";
 import { router } from "expo-router";
+import { loginUser } from "../services/authService"; // Import hàm loginUser
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState(""); // Thêm state cho email
+  const [password, setPassword] = useState(""); // Thêm state cho password
+  const [error, setError] = useState(""); // Thêm state cho lỗi (nếu có)
+
   const togglePassword = () => setShowPassword((prev) => !prev);
+
+  const handleLogin = async () => {
+    const success = await loginUser(email, password);
+    if (success) {
+      router.replace("/(tabs)/home"); // Chuyển hướng nếu đăng nhập thành công
+    } else {
+      setError("Invalid email or password."); // Hiển thị lỗi nếu thất bại
+    }
+  };
 
   return (
     <View className="flex-1 bg-white px-6 pt-20">
@@ -32,6 +46,8 @@ export default function Login() {
             keyboardType="email-address"
             className="flex-1 ml-2 text-black"
             placeholderTextColor="#A0A0A0"
+            value={email}
+            onChangeText={setEmail} // Cập nhật state khi nhập email
           />
         </View>
       </View>
@@ -46,6 +62,8 @@ export default function Login() {
             secureTextEntry={!showPassword}
             className="flex-1 ml-2 text-black"
             placeholderTextColor="#A0A0A0"
+            value={password}
+            onChangeText={setPassword} // Cập nhật state khi nhập password
           />
           <TouchableOpacity onPress={togglePassword}>
             {showPassword ? (
@@ -57,15 +75,19 @@ export default function Login() {
         </View>
       </View>
 
+      {/* Hiển thị lỗi nếu có */}
+      {error ? (
+        <Text className="text-red-500 mt-2 text-center">{error}</Text>
+      ) : null}
+
       {/* Sign In button */}
       <TouchableOpacity
-        onPress={() => router.replace("/(tabs)/home")}
+        onPress={handleLogin} // Sử dụng hàm handleLogin thay vì chuyển hướng trực tiếp
         className="bg-[#C67C4E] mt-8 py-4 rounded-2xl items-center flex-row justify-center"
       >
         <Text className="text-white text-lg font-semibold mr-2">Sign In</Text>
         <Text className="text-white text-lg">→</Text>
       </TouchableOpacity>
-
 
       {/* Google Sign In */}
       <TouchableOpacity className="bg-gray-100 rounded-full w-12 h-12 items-center justify-center mt-6 self-center">
