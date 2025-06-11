@@ -3,12 +3,15 @@ import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react-native";
 import { router } from "expo-router";
 import { loginUser } from "../services/authService"; // Import hàm loginUser
+import { useGoogleLogin } from "../hooks/useGoogleLogin";
+
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState(""); // Thêm state cho email
   const [password, setPassword] = useState(""); // Thêm state cho password
   const [error, setError] = useState(""); // Thêm state cho lỗi (nếu có)
+  const { promptAsync } = useGoogleLogin(); // Sử dụng hook để đăng nhập Google
 
   const togglePassword = () => setShowPassword((prev) => !prev);
 
@@ -90,10 +93,12 @@ export default function Login() {
       </TouchableOpacity>
 
       {/* Google Sign In */}
-      <TouchableOpacity className="bg-gray-100 rounded-full w-12 h-12 items-center justify-center mt-6 self-center">
+      <TouchableOpacity 
+        onPress={() => promptAsync()} 
+        className="bg-gray-100 rounded-full w-12 h-12 items-center justify-center mt-6 self-center">
         <Image
           source={{
-            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png",
+            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_logo.svg/1024px-Google_%22G%22_logo.svg.png",
           }}
           className="w-6 h-6"
         />
