@@ -45,7 +45,7 @@ const Home = () => {
         categories.unshift("All");
         const uniqueCategories = Array.from(new Set(categories)).map((category) => ({
           id: category,
-          selected: selectedCategory === category,
+          selected: selectedCategory === category, // Đồng bộ selected ngay từ đầu
         }));
 
         setProducts(productsData);
@@ -61,6 +61,15 @@ const Home = () => {
 
     loadProducts();
   }, []);
+
+  // Cập nhật productCategories khi selectedCategory thay đổi
+  useEffect(() => {
+    const updatedCategories = productCategories.map((category) => ({
+      ...category,
+      selected: category.id === selectedCategory,
+    }));
+    setProductCategories(updatedCategories);
+  }, [selectedCategory]);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>{error}</Text>;
@@ -87,13 +96,6 @@ const Home = () => {
       filteredProducts = filteredProducts.filter((product) =>
         product.name.toLowerCase().includes(query.toLowerCase())
       );
-    } else {
-      // Nếu query rỗng, giữ nguyên danh sách đã lọc theo danh mục
-      if (selectedCategory !== "All") {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.category === selectedCategory
-        );
-      }
     }
 
     setShownProducts(filteredProducts);
