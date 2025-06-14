@@ -2,7 +2,7 @@ import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react-native";
 import { router } from "expo-router";
-import { registerUser } from "../services/authService"; // Import hàm registerUser
+import { registerUser } from "../services/authService";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -15,16 +15,30 @@ export default function SignUp() {
   const togglePassword = () => setShowPassword((prev) => !prev);
   const toggleConfirmPassword = () => setShowConfirmPassword((prev) => !prev);
 
+  // Hàm kiểm tra định dạng email
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSignUp = async () => {
+    // Kiểm tra định dạng email
+    if (!isValidEmail(email)) {
+      setError("ERROR: Invalid email format!");
+      return;
+    }
+
+    // Kiểm tra mật khẩu trùng khớp
     if (password !== confirmPassword) {
       setError("ERROR: Password do not match!");
       return;
     }
+
     setError("");
     const success = await registerUser(email, password);
     if (success) {
-      setError(""); // Xóa lỗi nếu đăng ký thành công
-      router.push("/login"); // Chuyển hướng đến màn hình login
+      setError("");
+      router.push("/login");
     } else {
       setError("Email already exists or registration failed.");
     }
@@ -59,7 +73,6 @@ export default function SignUp() {
         </View>
       </View>
 
-      {/* Password Input */}
       <View className="mb-6 w-full">
         <Text className="text-sm font-medium text-gray-900 mb-2 text-left">Password</Text>
         <View className="flex-row items-center border border-[#FF6B6B] rounded-lg px-4 py-3 w-full">
@@ -83,26 +96,26 @@ export default function SignUp() {
       </View>
 
       <View className="mb-6 w-full">
-        <Text className="text-sm font-medium text-gray-900 mb-2 text-left">Password Confirmation</Text>
-        <View className="flex-row items-center border border-gray-300 rounded-lg px-4 py-3 w-full">
-          <Lock size={18} color="#777" />
-          <TextInput
-            placeholder="***************"
-            secureTextEntry={!showConfirmPassword}
-            placeholderTextColor="#A0A0A0"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            className="flex-1 ml-3 text-gray-900 text-base"
-          />
-          <TouchableOpacity onPress={toggleConfirmPassword}>
-            {showConfirmPassword ? (
-              <EyeOff size={18} color="#777" />
-            ) : (
-              <Eye size={18} color="#777" />
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
+  <Text className="text-sm font-medium text-gray-900 mb-2 text-left">Password Confirmation</Text>
+  <View className="flex-row items-center border border-gray-300 rounded-lg px-4 py-3 w-full">
+    <Lock size={18} color="#777" />
+    <TextInput
+      placeholder="***************"
+      secureTextEntry={!showConfirmPassword}
+      placeholderTextColor="#A0A0A0"
+      value={confirmPassword}
+      onChangeText={setConfirmPassword}
+      className="flex-1 ml-3 text-gray-900 text-base"
+    />
+    <TouchableOpacity onPress={toggleConfirmPassword}>
+      {showConfirmPassword ? (
+        <EyeOff size={18} color="#777" />
+      ) : (
+        <Eye size={18} color="#777" /> 
+      )}
+    </TouchableOpacity>
+  </View>
+</View>
 
       {error ? (
         <View className="flex-row items-center bg-[#FF6B6B] bg-opacity-10 border border-[#FF6B6B] rounded-lg px-4 py-2 mb-6 w-full">
