@@ -80,7 +80,7 @@ const Home = () => {
       duration: Toast.durations.SHORT,
     });
   };
-
+  // Hàm tìm kiếm sản phẩm
   const handleSearch = (query: string) => {
     let filteredProducts = [...products]; // Sao chép danh sách gốc
 

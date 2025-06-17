@@ -98,7 +98,7 @@ export default function Login() {
         className="bg-gray-100 rounded-full w-12 h-12 items-center justify-center mt-6 self-center">
         <Image
           source={{
-            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_logo.svg/1024px-Google_%22G%22_logo.svg.png",
+            uri: "https://freepnglogo.com/images/all_img/google-logo-2025-6ffb.png",
           }}
           className="w-6 h-6"
         />
